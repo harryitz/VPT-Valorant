@@ -1,8 +1,8 @@
-const {HttpsProxyAgent} = require("https-proxy-agent");
 const {parseSetCookie, stringifyCookies, extractTokensFromUri, decodeToken} = require("./Utils");
 const User = require("../user/User");
 const {getUserbyPuuid, addUser, getUser, deleteUser} = require("../storage/UserStorage");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
+const HenrikDevValorantAPI = require('unofficial-valorant-api');
 
 /**
  *
@@ -205,7 +205,6 @@ const getRegion = async (user) => {
 const getPlayerRank = async (user) => {
     const region = user.region;
     const userInfo = await getUseInfo(user.auth.rso);
-    const HenrikDevValorantAPI = require('unofficial-valorant-api');
     const vapi = new HenrikDevValorantAPI();
     if (!region || !userInfo) return null;
     const mmr_data = await vapi.getMMR({
@@ -234,6 +233,18 @@ const getVersion = async () => {
     let data = await response.json();
     let version = data[0].name;
     return version.split('_')[0];
+}
+
+const getLastMatch = async (user) => {
+    const region = user.region;
+    const userInfo = await getUseInfo(user.auth.rso);
+    const vapi = new HenrikDevValorantAPI();
+    if (!region || !userInfo) return null;
+    const extractUserName = userInfo.username.split('#');
+    let url = `https://api.henrikdev.xyz/valorant/v1/lifetime/mmr-history/${region}/${extractUserName[0]}/${extractUserName[1]}?page=1&size=1`;
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data[0].match_id;
 }
 
 // const getClientPlatform = async () => {
