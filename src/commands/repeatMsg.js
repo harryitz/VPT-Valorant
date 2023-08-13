@@ -39,8 +39,9 @@ module.exports = {
         await interaction.reply({
             embeds: [embedMessage(`Đã bắt đầu lặp lại tin nhắn **${message}** trong **${times}** giây!`)]
         });
-        setInterval(async () => {
+        const interval = setInterval(async () => {
             await channel.send(message);
         }, times * 1000);
+        main.getClient().intervals.push(interval);
     }
 }

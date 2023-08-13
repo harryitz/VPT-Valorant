@@ -91,7 +91,7 @@ class Client {
                 Discord.Partials.User
             ]
         });
-        this.client.guildInvites = new Discord.Collection();
+        this.client.intervals = {};
         this.client.login(process.env.BOT_TOKEN).then(async r => {
             this.registerEvents();
             await this.registerCommands();
