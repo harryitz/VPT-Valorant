@@ -1,7 +1,5 @@
 const Discord = require('discord.js')
 const {embedMessage} = require("../../utils/Utils");
-const {getUser} = require("../../storage/UserStorage");
-const {getPlayerRank, getRankInfo} = require("../../utils/Auth");
 const voiceChannelTracking = new Map();
 
 module.exports = {

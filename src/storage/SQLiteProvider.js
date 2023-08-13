@@ -42,6 +42,11 @@ class SQLiteProvider {
             discord_id TEXT NOT NULL,
             pieces TEXT NOT NULL DEFAULT "[]" 
         );`);
+        this.db.run(`CREATE TABLE IF NOT EXISTS match (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            discord_id TEXT NOT NULL,
+            match_id TEXT NOT NULL
+        );`);
     }
 
     async getProducts() {
@@ -370,6 +375,22 @@ class SQLiteProvider {
         const pieces = await this.getPieces(id);
         pieces.push(pieceId);
         this.db.run(`UPDATE pieces SET list = ? WHERE discord_id = ?`, [JSON.stringify(pieces), id]);
+    }
+
+    async addMatch(discord_id, matchId) {
+        this.db.run(`INSERT INTO matches (discord_id, match_id) VALUES (?, ?)`, [discord_id, matchId]);
+    }
+
+    async getMatch(discord_id, matchId) {
+        return new Promise((resolve, reject) => {
+            this.db.get(`SELECT * FROM matches WHERE discord_id = ? AND match_id = ?`, [discord_id, matchId], (err, row) => {
+                if (!row) {
+                    resolve(null);
+                    return;
+                }
+                resolve(row);
+            });
+        });
     }
 }
 

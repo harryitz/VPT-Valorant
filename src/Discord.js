@@ -26,9 +26,9 @@ class Client {
                 } else {
                     this.client.on(event.name, (...args) => event.execute(...args));
                 }
-                console.log(`Event ${event.name} loaded!`)
             }
         }
+        console.log(`Loaded ${eventDir.length} events!`)
     }
 
     async registerCommands() {
@@ -38,7 +38,6 @@ class Client {
         for (const file of commandFiles) {
             const command = require(`./commands/${file}`);
             await this.getClient().commands.set(command.data.name, command)
-            console.log(`Command ${command.data.name} loaded!`)
             commands.push(command.data.toJSON());
         }
         try {
@@ -54,6 +53,7 @@ class Client {
         } catch (e) {
             console.log(e.message)
         }
+        console.log(`Loaded ${commandFiles.length} commands!`)
     }
 
     initConfig() {

@@ -7,7 +7,7 @@ const {embedMessage} = require("../utils/Utils");
  */
 module.exports = {
     data: new  Discord.SlashCommandBuilder()
-        .setName('closeRepeatMsg')
+        .setName('closerepeatmsg')
         .setDescription('Đóng msg lặp lại')
         .addIntegerOption(option => option
             .setName("id")

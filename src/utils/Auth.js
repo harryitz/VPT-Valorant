@@ -2,7 +2,6 @@ const {parseSetCookie, stringifyCookies, extractTokensFromUri, decodeToken} = re
 const User = require("../user/User");
 const {getUserbyPuuid, addUser, getUser, deleteUser} = require("../storage/UserStorage");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
-const HenrikDevValorantAPI = require('unofficial-valorant-api');
 
 /**
  *
