@@ -7,7 +7,7 @@ const {EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, Act
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('shop')
         .setDescription('Xem các sản phẩm trong shop'),
     admin: true,

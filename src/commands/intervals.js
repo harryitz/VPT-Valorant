@@ -6,7 +6,7 @@ const {embedMessage} = require("../utils/Utils");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('intervals')
         .setDescription('Kiểm tra các messages được lặp lại'),
     async execute(interaction) {

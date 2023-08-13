@@ -7,7 +7,7 @@ const {EmbedBuilder, ButtonBuilder, ActionRowBuilder} = require("discord.js");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('refill')
         .setDescription('Fill lại các lượt mua'),
     admin: true,

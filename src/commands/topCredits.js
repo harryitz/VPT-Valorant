@@ -6,7 +6,7 @@ const {embedMessage} = require("../utils/Utils");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('topcredits')
         .setDescription('Xem top credit của server'),
     async execute(interaction) {
@@ -31,7 +31,8 @@ module.exports = {
                     i++;
                     description += `Top **${i}** thuộc về **${member.user.username}** với **${value.credit}** <:vvcl:1135935565301305374>\n`;
                 }
-            } catch (e){}
+            } catch (e) {
+            }
         }
         await interaction.reply({
             embeds: [embedMessage(`**TOP CREDIT CỦA SERVER**\n\n${description}`)],

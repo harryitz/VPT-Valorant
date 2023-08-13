@@ -6,7 +6,7 @@ const {embedMessage} = require("../utils/Utils");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('credits')
         .setDescription('Kiểm tra credit của bạn'),
     async execute(interaction) {

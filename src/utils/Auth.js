@@ -121,7 +121,7 @@ const login2FA = async (id, mfaCode) => {
     return {success: true};
 }
 
-const extractUser = async (id, authInfo, authUri, user=null) => {
+const extractUser = async (id, authInfo, authUri, user = null) => {
     if (!user) user = new User({id})
     const [rso, idt] = extractTokensFromUri(authUri);
     user.auth = {
@@ -168,7 +168,7 @@ const getUseInfo = async (token) => {
         }
     });
     let data = await response.json();
-    if(data.acct) return {
+    if (data.acct) return {
         puuid: data.sub,
         username: data.acct.game_name && data.acct.game_name + "#" + data.acct.tag_line
     }
@@ -261,7 +261,8 @@ const isWin = async (user, match_id) => {
     const teams = data.teams;
     const info = teams[team];
     if (!info) return null;
-    return info.has_won;;
+    return info.has_won;
+
 }
 
 // const getClientPlatform = async () => {

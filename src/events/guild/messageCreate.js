@@ -17,7 +17,7 @@ module.exports = {
                     await message.reply({
                         embeds: [embedMessage(`Bạn phải vào voice channel trước khi sử dụng lệnh này!`)]
                     });
-                    return;
+
                 } else {
                     const rank = args[0];
                     const msg = args.slice(1).join(" ");
@@ -69,6 +69,6 @@ module.exports = {
                     message.delete();
                 }
             }
-        }        
+        }
     }
 }

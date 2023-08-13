@@ -7,7 +7,7 @@ const {EmbedBuilder, ButtonBuilder, ActionRowBuilder} = require("discord.js");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('diemdanh')
         .setDescription('Tạo điểm danh'),
     admin: true,

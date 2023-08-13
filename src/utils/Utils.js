@@ -41,13 +41,13 @@ const decodeToken = (token) => {
     return JSON.parse(atob(encodedPayload));
 }
 const parseSetCookie = (setCookie) => {
-    if(!setCookie) {
+    if (!setCookie) {
         console.error("Riot didn't return any cookies during the auth request! Cloudflare might have something to do with it...");
         return {};
     }
 
     const cookies = {};
-    for(const cookie of setCookie) {
+    for (const cookie of setCookie) {
         const sep = cookie.indexOf("=");
         cookies[cookie.slice(0, sep)] = cookie.slice(sep + 1, cookie.indexOf(';'));
     }
@@ -64,7 +64,7 @@ const stringifyCookies = (cookies) => {
 
 const extractTokensFromUri = (uri) => {
     const match = uri.match(/access_token=((?:[a-zA-Z]|\d|\.|-|_)*).*id_token=((?:[a-zA-Z]|\d|\.|-|_)*).*expires_in=(\d*)/);
-    if(!match) return [null, null];
+    if (!match) return [null, null];
 
     const [, accessToken, idToken] = match;
     return [accessToken, idToken]

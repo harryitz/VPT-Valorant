@@ -7,7 +7,7 @@ const {deleteUser, getUser} = require("../storage/UserStorage");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('dangxuat')
         .setDescription('Đăng Xuất'),
     async execute(interaction) {

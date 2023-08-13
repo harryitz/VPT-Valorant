@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const fs = require('fs');
-const { Routes } = require('discord-api-types/v10');
+const {Routes} = require('discord-api-types/v10');
 const SQLiteProvider = require("./storage/SQLiteProvider");
 
 class Client {

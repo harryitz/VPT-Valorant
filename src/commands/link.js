@@ -10,7 +10,7 @@ const {isReadyLink} = require("../storage/UserStorage");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('lienket')
         .setDescription('Liên kết với tài khoản valorant')
         .addStringOption(option => option

@@ -6,7 +6,7 @@ const {embedMessage, getRankIcon, countItemsInString} = require("../utils/Utils"
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('takecredits')
         .setDescription('Lấy credit của người dùng')
         .addUserOption(option => option

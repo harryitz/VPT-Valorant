@@ -7,7 +7,7 @@ const {bold} = require("discord.js");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('voice')
         .setDescription('Tìm đồng đội')
         .addStringOption(option => option
@@ -15,15 +15,15 @@ module.exports = {
             .setDescription("Rank của bạn")
             .setRequired(true)
             .addChoices(
-                { name: "Iron", value: "iron" },
-                { name: "Bronze", value: "bronze" },
-                { name: "Silver", value: "silver" },
-                { name: "Gold", value: "gold" },
-                { name: "Platinum", value: "platinum" },
-                { name: "Diamond", value: "diamond" },
-                { name: "Ascendant", value: "ascendant" },
-                { name: "Immortal", value: "immortal" },
-                { name: "Radiant", value: "radiant" }
+                {name: "Iron", value: "iron"},
+                {name: "Bronze", value: "bronze"},
+                {name: "Silver", value: "silver"},
+                {name: "Gold", value: "gold"},
+                {name: "Platinum", value: "platinum"},
+                {name: "Diamond", value: "diamond"},
+                {name: "Ascendant", value: "ascendant"},
+                {name: "Immortal", value: "immortal"},
+                {name: "Radiant", value: "radiant"}
             )
         )
         .addStringOption(option => option

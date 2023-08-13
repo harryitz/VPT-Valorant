@@ -6,7 +6,7 @@ const {embedMessage, getRankIcon} = require("../utils/Utils");
  * @type {{data: Discord.SlashCommandBuilder, execute(*): Promise<void>}}
  */
 module.exports = {
-    data: new  Discord.SlashCommandBuilder()
+    data: new Discord.SlashCommandBuilder()
         .setName('addproductitem')
         .setDescription('Thêm sản phẩm')
         .addStringOption(option => option
