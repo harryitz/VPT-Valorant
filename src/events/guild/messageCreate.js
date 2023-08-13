@@ -1,5 +1,5 @@
 const Discord = require('discord.js')
-const {isAdmin, embedMessage, getRankIcon, getRankName} = require("../../utils/Utils");
+const {embedMessage, getRankIcon, getRankName} = require("../../utils/Utils");
 const {bold} = require("discord.js");
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
     once: false,
     async execute(message) {
         if (message.author.bot) return;
-        if (message.channel.type === "DM") return;
+        if (message.channel.type === Discord.ChannelType.DM) return;
         if (message.content.startsWith("+")) {
             const args = message.content.slice(1).trim().split(/ +/);
             const commandName = args.shift().toLowerCase();
