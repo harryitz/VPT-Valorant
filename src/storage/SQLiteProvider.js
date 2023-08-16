@@ -37,16 +37,16 @@ class SQLiteProvider {
             discord_id TEXT NOT NULL,
             list TEXT NOT NULL
         );`);
-        this.db.run(`CREATE TABLE IF NOT EXISTS pieces (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            discord_id TEXT NOT NULL,
-            pieces TEXT NOT NULL DEFAULT "[]" 
-        );`);
-        this.db.run(`CREATE TABLE IF NOT EXISTS match (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            discord_id TEXT NOT NULL,
-            match_id TEXT NOT NULL
-        );`);
+        // this.db.run(`CREATE TABLE IF NOT EXISTS pieces (
+        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+        //     discord_id TEXT NOT NULL,
+        //     pieces TEXT NOT NULL DEFAULT "[]"
+        // );`);
+        // this.db.run(`CREATE TABLE IF NOT EXISTS match (
+        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+        //     discord_id TEXT NOT NULL,
+        //     match_id TEXT NOT NULL
+        // );`);
     }
 
     async getProducts() {
@@ -355,26 +355,6 @@ class SQLiteProvider {
                 discord_id TEXT NOT NULL,
                 list TEXT NOT NULL
             );`);
-    }
-
-    async getPieces(id) {
-        return new Promise((resolve, reject) => {
-            this.db.get(`SELECT * FROM pieces WHERE discord_id = ?`, [id], (err, row) => {
-                if (!row) {
-                    const pieces = [];
-                    this.db.run(`INSERT INTO pieces (discord_id, list) VALUES (?, ?)`, [id, JSON.stringify(pieces)]);
-                    resolve(pieces);
-                    return;
-                }
-                resolve(JSON.parse(row.list));
-            });
-        });
-    }
-
-    async addPieces(id, pieceId) {
-        const pieces = await this.getPieces(id);
-        pieces.push(pieceId);
-        this.db.run(`UPDATE pieces SET list = ? WHERE discord_id = ?`, [JSON.stringify(pieces), id]);
     }
 
     async addMatch(discord_id, matchId) {

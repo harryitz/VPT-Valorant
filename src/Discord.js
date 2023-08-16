@@ -2,17 +2,36 @@ const Discord = require("discord.js");
 const fs = require('fs');
 const {Routes} = require('discord-api-types/v10');
 const SQLiteProvider = require("./storage/SQLiteProvider");
+const express = require('express');
+const {NetworkManager} = require("./network/NetworkManager");
 
 class Client {
 
     constructor() {
         this.initConfig();
+        this.loadApp().then();
         process.on('unhandledRejection', error => {
             console.log(error);
         })
         process.on('uncaughtException', error => {
             console.log(error);
         })
+    }
+
+    async loadApp() {
+        this.app = express();
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }))
+        this.networkManager = new NetworkManager(this.app);
+        this.networkManager.registerResponses();
+        this.networkManager.registerNetworkURL();
+        this.app.listen(3000, () => {
+            console.log(
+                `VPT app listening at http://localhost:3000`
+            );
+        });
+        this.app.keepAliveTimeout = 20 * 1000;
+        this.app.headersTimeout = 40 * 1000;
     }
 
     registerEvents() {
