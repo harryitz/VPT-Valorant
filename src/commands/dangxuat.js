@@ -20,6 +20,10 @@ module.exports = {
             });
             return;
         }
+        await interaction.reply({
+            embeds: [embedMessage(`Đăng xuất thành công!`)],
+            ephemeral: true
+        });
         for (const tier in config.ranks) {
             const role = await interaction.guild.roles.fetch(config.ranks[tier].role);
             if (role) {
@@ -29,9 +33,5 @@ module.exports = {
             }
         }
         await deleteUser(user.id);
-        await interaction.reply({
-            embeds: [embedMessage(`Đăng xuất thành công!`)],
-            ephemeral: true
-        });
     }
 }

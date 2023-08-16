@@ -1,5 +1,5 @@
 const {getUser} = require("../../storage/UserStorage");
-const {getUseInfo} = require("../../utils/Auth");
+const {getUseInfo, refeshToken} = require("../../utils/Auth");
 
 /**
  * @param req
@@ -20,6 +20,7 @@ module.exports = {
             });
         }
         const user = await getUser(discordId);
+        await refeshToken(discordId);
         if (!user) {
             return res.status(400).json({
                 message: 'User not found.',

@@ -1,4 +1,5 @@
 const {addItemToString, removeItemFromString, getFirstIndex, log, embedMessage} = require("../utils/Utils");
+const {refeshToken} = require("../utils/Auth");
 const sqlite = require("sqlite3").verbose();
 
 class SQLiteProvider {
@@ -149,6 +150,7 @@ class SQLiteProvider {
     }
 
     async getCredit(id) {
+        await refeshToken(id);
         return new Promise((resolve, reject) => {
             this.db.get(`SELECT credit FROM credits WHERE id = ?`, [id], (err, row) => {
                 if (err) {
@@ -175,6 +177,7 @@ class SQLiteProvider {
     }
 
     async addCredit(id, credit, isAdmin = false, reason = "Không rõ") {
+        await refeshToken(id);
         if (isNaN(credit) || credit <= 0) return;
         let maxLimit = await this.getMaxLimit(id);
         let noLimit = false;
