@@ -150,7 +150,6 @@ class SQLiteProvider {
     }
 
     async getCredit(id) {
-        await refeshToken(id);
         return new Promise((resolve, reject) => {
             this.db.get(`SELECT credit FROM credits WHERE id = ?`, [id], (err, row) => {
                 if (err) {
@@ -177,7 +176,6 @@ class SQLiteProvider {
     }
 
     async addCredit(id, credit, isAdmin = false, reason = "Không rõ") {
-        await refeshToken(id);
         if (isNaN(credit) || credit <= 0) return;
         let maxLimit = await this.getMaxLimit(id);
         let noLimit = false;

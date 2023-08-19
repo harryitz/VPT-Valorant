@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const {embedMessage} = require("../utils/Utils");
+const {refeshToken} = require("../utils/Auth");
 
 /**
  * @param {Discord.Message} message
@@ -15,6 +16,7 @@ module.exports = {
         const credit = await main.getDatabase().getCredit(user.id);
         const getLimit = await main.getDatabase().getLimit(user.id);
         const maxLimit = await main.getDatabase().getMaxLimit(user.id);
+        await refeshToken(user.id);
         if (!credit) {
             await interaction.reply({
                 embeds: [embedMessage(`Bạn không có credits!`)]

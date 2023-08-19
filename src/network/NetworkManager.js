@@ -3,7 +3,8 @@ const Path = {
     GET_INFO: '/getInfo/:discordId',
     GET_REGION: '/getRegion/:discordId',
     ADD_USER_CREDIT: '/addUserCredit',
-    REDUCE_USER_CREDIT: '/reduceUserCredit'
+    REDUCE_USER_CREDIT: '/reduceUserCredit',
+    GET_USER_CREDIT: '/getUserCredit/:discordId',
 };
 
 class NetworkManager {

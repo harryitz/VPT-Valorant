@@ -62,7 +62,7 @@ const login = async (id, username, password) => {
         let user = await extractUser(id, {
             login: username,
             password: password,
-            cookies: cookies
+            cookies: parseSetCookie(response2.headers.getSetCookie())
         }, data.response.parameters.uri);
         addUser(user);
         return {success: true};
@@ -284,6 +284,7 @@ const getClientVersion = async () => {
 
 const refeshToken = async (discordId) => {
     let user = await getUser(discordId);
+    if (!user) return;
     const url = `https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in&client_id=play-valorant-web-prod&response_type=token%20id_token&scope=account%20openid&nonce=1`;
     const headers = {
         'Content-Type': 'application/json',
@@ -295,7 +296,7 @@ const refeshToken = async (discordId) => {
         headers: headers,
         redirect: 'manual'
     });
-    deleteUser(discordId);
+    await deleteUser(discordId);
     const data = response.headers.get('location');
     if (!data) return null;
     const [rso, idt] = extractTokensFromUri(data);
@@ -303,9 +304,9 @@ const refeshToken = async (discordId) => {
         rso: rso,
         idt: idt
     }
-    user.puuid = decodeToken(rso).sub;
+    user.puuid = user.puuid || decodeToken(rso).sub;
     user.auth.cookies = parseSetCookie(response.headers.getSetCookie());
-    addUser(user);
+    await addUser(user);
     return user;
 }
 

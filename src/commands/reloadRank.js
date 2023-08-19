@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const {embedMessage} = require("../utils/Utils");
-const {getPlayerRank, getRankInfo} = require("../utils/Auth");
+const {getPlayerRank, getRankInfo, refeshToken} = require("../utils/Auth");
 const {getUser, deleteUser} = require("../storage/UserStorage");
 const {getInviterDB, addRankToInviterDB, getRemoved, setRemoved} = require("../storage/CreditsStorage");
 
@@ -14,6 +14,7 @@ module.exports = {
         .setDescription('Reload lại rank của bạn'),
     async execute(interaction) {
         const user = interaction.user;
+        await refeshToken(user.id);
         const userinfo = await getUser(user.id);
         if (!userinfo) {
             await interaction.reply({
