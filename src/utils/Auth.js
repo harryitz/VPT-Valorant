@@ -12,7 +12,7 @@ const HenrikDevValorantAPI = require("unofficial-valorant-api");
  */
 const login = async (id, username, password) => {
     let url = 'https://auth.riotgames.com/api/v1/authorization';
-    let userAgent = `ShooterGame/11 Windows/10.0.22621.1.768.64bit`;
+    let userAgent = getUserAgent();
     const headers1 = {
         'Content-Type': 'application/json',
         'User-Agent': userAgent,
@@ -82,12 +82,11 @@ const login = async (id, username, password) => {
 
 const login2FA = async (id, mfaCode) => {
     let user = await getUser(id);
-    let version = await getVersion();
     const req = await fetch("https://auth.riotgames.com/api/v1/authorization", {
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
-            'User-Agent': `RiotClient/${version}.1234567 rso-auth (Windows;10;;Professional, x64)`,
+            'User-Agent': getUserAgent(),
             'Cookie': stringifyCookies(user.auth.cookies)
         },
         body: JSON.stringify({
@@ -278,7 +277,7 @@ const isWin = async (user, match_id) => {
 const getClientVersion = async () => {
     const req = await fetch("https://valorant-api.com/v1/version");
     const data = await req.json();
-    return data.data.riotClientVersion
+    return data.data.riotClientVersion;
 }
 
 const refeshToken = async (discordId) => {
@@ -289,7 +288,7 @@ const refeshToken = async (discordId) => {
     const url = `https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in&client_id=play-valorant-web-prod&response_type=token%20id_token&scope=account%20openid&nonce=1`;
     const headers = {
         'Content-Type': 'application/json',
-        'User-Agent': `RiotClient/${await getClientVersion()}.1234567 rso-auth (Windows;10;;Professional, x64)`,
+        'User-Agent': getUserAgent(),
         'Cookie': stringifyCookies(user.auth.cookies)
     }
     const response = await fetch(url, {
@@ -309,6 +308,10 @@ const refeshToken = async (discordId) => {
     user.auth.cookies = parseSetCookie(response.headers.getSetCookie());
     await addUser(user);
     return user;
+}
+
+const getUserAgent = () => {
+    return `ShooterGame/11 Windows/10.0.22621.1.768.64bit`;
 }
 
 module.exports = {
