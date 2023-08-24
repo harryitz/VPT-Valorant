@@ -16,16 +16,16 @@ module.exports = {
         const user = interaction.user;
         await refeshToken(user.id);
         const userinfo = await getUser(user.id);
+        await interaction.deferReply({
+            ephemeral: true
+        });
         if (!userinfo) {
-            await interaction.reply({
+            await interaction.editReply({
                 embeds: [embedMessage(`${user}, Bạn chưa liên kết tài khoản!`)],
                 ephemeral: true
             });
             return;
         }
-        await interaction.deferReply({
-            ephemeral: true
-        });
         let rank = await getPlayerRank(userinfo);
         if (!rank) {
             await deleteUser(user.id);

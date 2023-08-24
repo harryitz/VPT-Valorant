@@ -1,4 +1,4 @@
-const {parseSetCookie, stringifyCookies, extractTokensFromUri, decodeToken} = require("./Utils");
+const {parseSetCookie, stringifyCookies, extractTokensFromUri, decodeToken, embedMessage} = require("./Utils");
 const User = require("../user/User");
 const {getUserbyPuuid, addUser, getUser, deleteUser} = require("../storage/UserStorage");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
@@ -11,9 +11,8 @@ const HenrikDevValorantAPI = require("unofficial-valorant-api");
  * @returns {Promise<{success: boolean}|{success: boolean, token: string}>}
  */
 const login = async (id, username, password) => {
-    let version = await getVersion();
     let url = 'https://auth.riotgames.com/api/v1/authorization';
-    let userAgent = `RiotClient/${version}.1234567 rso-auth (Windows;10;;Professional, x64)`;
+    let userAgent = `ShooterGame/11 Windows/10.0.22621.1.768.64bit`;
     const headers1 = {
         'Content-Type': 'application/json',
         'User-Agent': userAgent,
@@ -284,7 +283,9 @@ const getClientVersion = async () => {
 
 const refeshToken = async (discordId) => {
     let user = await getUser(discordId);
-    if (!user) return;
+    if (!user || !user.auth.cookies) {
+        return null;
+    }
     const url = `https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in&client_id=play-valorant-web-prod&response_type=token%20id_token&scope=account%20openid&nonce=1`;
     const headers = {
         'Content-Type': 'application/json',

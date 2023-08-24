@@ -1,12 +1,12 @@
 const Discord = require('discord.js')
 const {isAdmin, embedMessage} = require("../../utils/Utils");
-const {ChannelType} = require("discord-api-types/v6");
+const {ChannelType} = require("discord-api-types/v10");
 
 module.exports = {
     name: Discord.Events.InteractionCreate,
     once: false,
     async execute(interaction) {
-        if (!interaction.isCommand()) return;
+        if (!interaction.isCommand() || !interaction.channel) return;
         if (interaction.channel.type === ChannelType.DM) return;
         const command = main.getClient().commands.get(interaction.commandName);
         if (!command) return;
