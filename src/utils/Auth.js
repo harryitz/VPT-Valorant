@@ -209,7 +209,7 @@ const getPlayerRank = async (user) => {
         version: 'v2',
         region: region,
         name: userInfo.username.split('#')[0],
-        tag: userInfo.username.split('#')[1]
+        tag: userInfo.username.split('#')[1],
     });
     if (!mmr_data) return null;
     return {
@@ -233,37 +233,6 @@ const getVersion = async () => {
     return version.split('_')[0];
 }
 
-const getLastMatch = async (user) => {
-    const region = user.region;
-    const userInfo = await getUseInfo(user.auth.rso);
-    if (!region || !userInfo) return null;
-    const extractUserName = userInfo.username.split('#');
-    let url = `https://api.henrikdev.xyz/valorant/v1/lifetime/mmr-history/${region}/${extractUserName[0]}/${extractUserName[1]}?page=1&size=1`;
-    let response = await fetch(url);
-    let data = await response.json();
-    return data.data[0].match_id;
-}
-
-const isWin = async (user, match_id) => {
-    const region = user.region;
-    const userInfo = await getUseInfo(user.auth.rso);
-    if (!region || !userInfo) return null;
-    const extractUserName = userInfo.username.split('#');
-    let url = `https://api.henrikdev.xyz/valorant/v2//match/${match_id}`
-    let response = await fetch(url);
-    let data = await response.json();
-    data = data.data;
-    let players = data.players.all_players;
-    const player = players.find(p => p.name === `${extractUserName[0]}` && p.tag === `${extractUserName[1]}`);
-    if (!player) return null;
-    const team = player.team.toLowerCase();
-    const teams = data.teams;
-    const info = teams[team];
-    if (!info) return null;
-    return info.has_won;
-
-}
-
 // const getClientPlatform = async () => {
 //     const platformInfo = {
 //         "platformType": "PC",
@@ -274,11 +243,11 @@ const isWin = async (user, match_id) => {
 //     return btoa(JSON.stringify(platformInfo));
 // }
 //
-const getClientVersion = async () => {
-    const req = await fetch("https://valorant-api.com/v1/version");
-    const data = await req.json();
-    return data.data.riotClientVersion;
-}
+// const getClientVersion = async () => {
+//     const req = await fetch("https://valorant-api.com/v1/version");
+//     const data = await req.json();
+//     return data.data.riotClientVersion;
+// }
 
 const refeshToken = async (discordId) => {
     let user = await getUser(discordId);

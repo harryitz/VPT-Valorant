@@ -17,6 +17,11 @@ module.exports = {
                 let verifyCredits = 0;
                 let bonusCredit = 0;
                 const currentTime = Date.now();
+                const isMute = member.voice.mute;
+                if (isMute) {
+                    voiceChannelTracking.delete(member.id);
+                    return;
+                }
                 const joinTime = voiceChannelTracking.get(member.id);
                 const timeSpentInSeconds = Math.floor((currentTime - joinTime) / 1000);
                 const timeSpentInMinutes = Math.floor(timeSpentInSeconds / 60);
