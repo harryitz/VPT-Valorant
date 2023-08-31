@@ -102,7 +102,8 @@ class Client {
                 Discord.GatewayIntentBits.GuildMessageTyping,
                 Discord.GatewayIntentBits.DirectMessages,
                 Discord.GatewayIntentBits.MessageContent,
-                Discord.GatewayIntentBits.GuildVoiceStates
+                Discord.GatewayIntentBits.GuildVoiceStates,
+                Discord.GatewayIntentBits.GuildInvites
             ],
             partials: [
                 Discord.Partials.Message,
@@ -111,6 +112,7 @@ class Client {
             ]
         });
         this.client.intervals = {};
+        this.client.guildInvites = new Map();
         this.client.login(process.env.BOT_TOKEN).then(async r => {
             this.registerEvents();
             await this.registerCommands();

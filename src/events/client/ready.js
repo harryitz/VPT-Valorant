@@ -12,5 +12,12 @@ module.exports = {
                 type: Discord.ActivityType.Playing
             }]
         })
+        const guilds = main.getClient().guilds.cache;
+        guilds.forEach(guild => {
+            guild.invites.fetch().then(async invites => {
+                if (guild.vanityURLCode) invites.set(guild.vanityURLCode, await guild.fetchVanityData());
+                main.getClient().guildInvites.set(guild.id, invites);
+            })
+        })
     }
 }
