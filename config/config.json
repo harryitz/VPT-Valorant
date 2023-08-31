@@ -4,6 +4,8 @@
     "guild": "426331196356558848",
     "logChannel": "1135930842355605644",
     "AFKChannel": "1136376608794628106",
+    "LIMIT_INVITE": 5,
+    "INVITE_CREDIT": 200,
     "verifyRole": {
         "id": "1131818906940616706",
         "name": "ĐÃ XÁC MINH",

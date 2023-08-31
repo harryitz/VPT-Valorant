@@ -38,16 +38,12 @@ class SQLiteProvider {
             discord_id TEXT NOT NULL,
             list TEXT NOT NULL
         );`);
-        // this.db.run(`CREATE TABLE IF NOT EXISTS pieces (
-        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-        //     discord_id TEXT NOT NULL,
-        //     pieces TEXT NOT NULL DEFAULT "[]"
-        // );`);
-        // this.db.run(`CREATE TABLE IF NOT EXISTS match (
-        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-        //     discord_id TEXT NOT NULL,
-        //     match_id TEXT NOT NULL
-        // );`);
+        this.db.run(`CREATE TABLE IF NOT EXISTS invites (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            discord_id TEXT NOT NULL,
+            time INTEGER NOT NULL DEFAULT 0,
+            currentday TEXT NOT NULL
+        );`);
     }
 
     async getProducts() {
@@ -358,20 +354,28 @@ class SQLiteProvider {
             );`);
     }
 
-    async addMatch(discord_id, matchId) {
-        this.db.run(`INSERT INTO matches (discord_id, match_id) VALUES (?, ?)`, [discord_id, matchId]);
-    }
-
-    async getMatch(discord_id, matchId) {
+    async getInvites(id) {
+        const currentDay = new Date().toLocaleDateString('vi-VN');
         return new Promise((resolve, reject) => {
-            this.db.get(`SELECT * FROM matches WHERE discord_id = ? AND match_id = ?`, [discord_id, matchId], (err, row) => {
+            this.db.get(`SELECT * FROM invites WHERE discord_id = ?`, [id], (err, row) => {
                 if (!row) {
-                    resolve(null);
+                    resolve(0);
                     return;
                 }
-                resolve(row);
+                if (row.currentday !== currentDay) {
+                    this.db.run(`UPDATE invites SET currentday = ?, time = ? WHERE discord_id = ?`, [currentDay, 0, id]);
+                    resolve(0);
+                    return;
+                }
+                resolve(row.time);
             });
         });
+    }
+
+    async addInvite(id) {
+        const currentDay = new Date().toLocaleDateString('vi-VN');
+        const invites = await this.getInvites(id);
+        this.db.run(`UPDATE invites SET time = ?, currentday = ? WHERE discord_id = ?`, [invites + 1, currentDay, id]);
     }
 }
 

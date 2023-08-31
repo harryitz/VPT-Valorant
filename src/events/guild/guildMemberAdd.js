@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const {embedMessage} = require("../../utils/Utils");
 
 
 module.exports = {
@@ -14,6 +15,15 @@ module.exports = {
         const usedInvite = newInvites.find(inv => cachedInvites.get(inv.code).uses <= inv.uses);
         if(!usedInvite) return;
         let inviter = await member.guild.members.fetch(usedInvite.inviter);
-        console.log(inviter.user);
+        if(!inviter) return;
+        const user = inviter.user;
+        if (user.bot) return;
+        const invites = await main.getDatabase().getInvites(user.id);
+        if (invites >= config.LIMIT_INVITE) return;
+        await main.getDatabase().addInvite(user.id, member.id, usedInvite.code);
+        await main.getDatabase().addCredit(user.id, config.INVITE_CREDIT, false, `invite ${member.id}`);
+        user.send({
+            embeds: [embedMessage(`Bạn đã nhận được ${config.INVITE_CREDIT} <:vvcl:1135935565301305374> vì đã invite ${member} vào server!`)]
+        });
     }
 }
