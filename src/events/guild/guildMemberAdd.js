@@ -19,7 +19,7 @@ module.exports = {
         const user = inviter.user;
         if (user.bot) return;
         const invites = await main.getDatabase().getInvites(user.id);
-        if (invites >= config.LIMIT_INVITE) return;z
+        if (invites >= config.LIMIT_INVITE) return;
         const credits = main.getDatabase().getCredit(member.id);
         if (credits) return; // Detect user has join before
         await main.getDatabase().addInvite(user.id, member.id, usedInvite.code);
