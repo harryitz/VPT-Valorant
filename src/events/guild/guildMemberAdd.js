@@ -19,8 +19,11 @@ module.exports = {
         const user = inviter.user;
         if (user.bot) return;
         const invites = await main.getDatabase().getInvites(user.id);
-        if (invites >= config.LIMIT_INVITE) return;
+        if (invites >= config.LIMIT_INVITE) return;z
+        const credits = main.getDatabase().getCredit(member.id);
+        if (credits) return; // Detect user has join before
         await main.getDatabase().addInvite(user.id, member.id, usedInvite.code);
+        await main.getDatabase().addCredit(member.id, 0, `Tạo profile lần đầu!`);
         await main.getDatabase().addCredit(user.id, config.INVITE_CREDIT, false, `invite ${member.id}`);
         user.send({
             embeds: [embedMessage(`Bạn đã nhận được ${config.INVITE_CREDIT} <:vvcl:1135935565301305374> vì đã invite ${member} vào server!`)]
