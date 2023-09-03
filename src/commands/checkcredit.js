@@ -19,7 +19,8 @@ module.exports = {
         await refeshToken(user.id);
         if (!credit) {
             await interaction.reply({
-                embeds: [embedMessage(`Bạn không có credits!`)]
+                embeds: [embedMessage(`Bạn không có credits!`)],
+                ephemeral: true
             });
             return;
         }

@@ -1,6 +1,6 @@
 ﻿{
     "presence": "play with VVC!",
-    "IS_DEV": true,
+    "IS_DEV": false,
     "guild": "426331196356558848",
     "logChannel": "1135930842355605644",
     "AFKChannel": "1136376608794628106",

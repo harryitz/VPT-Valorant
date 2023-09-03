@@ -359,6 +359,7 @@ class SQLiteProvider {
         return new Promise((resolve, reject) => {
             this.db.get(`SELECT * FROM invites WHERE discord_id = ?`, [id], (err, row) => {
                 if (!row) {
+                    this.db.run(`INSERT INTO invites (discord_id, time, currentday) VALUES (?, ?, ?)`, [id, 0, currentDay])
                     resolve(0);
                     return;
                 }
