@@ -24,7 +24,7 @@ module.exports = {
         if (credits) return; // Detect user has join before
         await main.getDatabase().addInvite(user.id, member.id, usedInvite.code);
         await main.getDatabase().addCredit(member.id, 1, false, `Tạo profile lần đầu!`);
-        await main.getDatabase().addCredit(user.id, config.INVITE_CREDIT, false, `invite ${member.username}`);
+        await main.getDatabase().addCredit(user.id, config.INVITE_CREDIT, false, `invite ${member.user.username}`);
         user.send({
             embeds: [embedMessage(`Bạn đã nhận được ${config.INVITE_CREDIT} <:vvcl:1135935565301305374> vì đã invite ${member} vào server!`)]
         });
