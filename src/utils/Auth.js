@@ -119,6 +119,34 @@ const login2FA = async (id, mfaCode) => {
     return {success: true};
 }
 
+const loginWithCookie = async (id, cookies) => {
+    const url = `https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in&client_id=play-valorant-web-prod&response_type=token%20id_token&scope=account%20openid&nonce=1`;
+    const headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': getUserAgent(),
+        'Cookie': cookies
+    }
+    const req = await fetch(url, {
+        method: 'GET',
+        headers: headers,
+        redirect: 'manual'
+    });
+    const data = req.headers.get('location');
+    if(!data.includes("access_token")) return {success: false};
+    cookies = {
+        ...parseSetCookie(cookies),
+        ...parseSetCookie(req.headers.getSetCookie())
+    }
+    const user = await extractUser(id,
+        {
+            login: null,
+            password: null,
+            cookies: cookies
+        }, data);
+    addUser(user);
+    return {success: true};
+}
+
 const extractUser = async (id, authInfo, authUri, user = null) => {
     if (!user) user = new User({id})
     const [rso, idt] = extractTokensFromUri(authUri);
@@ -289,5 +317,6 @@ module.exports = {
     getUseInfo,
     getPlayerRank,
     getRankInfo,
-    refeshToken
+    refeshToken,
+    loginWithCookie
 }
