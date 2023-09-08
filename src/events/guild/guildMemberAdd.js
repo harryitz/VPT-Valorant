@@ -10,9 +10,9 @@ module.exports = {
         if(member.user.bot) return;
         const cachedInvites = main.getClient().guildInvites.get(member.guild.id);
         const newInvites = await member.guild.invites.fetch();
+        const usedInvite = newInvites.find(inv => inv.uses > cachedInvites.get(inv.code).uses);
         if(member.guild.vanityURLCode) newInvites.set(member.guild.vanityURLCode, await member.guild.fetchVanityData());
         main.getClient().guildInvites.set(member.guild.id, newInvites);
-        const usedInvite = newInvites.find(inv => cachedInvites.get(inv.code).uses <= inv.uses);
         if(!usedInvite) return;
         let inviter = await member.guild.members.fetch(usedInvite.inviter);
         if(!inviter) return;

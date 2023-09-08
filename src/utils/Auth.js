@@ -203,13 +203,13 @@ const getRegion = async (user) => {
 const getPlayerRank = async (user) => {
     const region = user.region;
     const userInfo = await getUseInfo(user.auth.rso);
-    const vapi = new HenrikDevValorantAPI();
+    const vapi = new HenrikDevValorantAPI(config.API_KEY);
     if (!region || !userInfo) return null;
     const mmr_data = await vapi.getMMR({
         version: 'v2',
         region: region,
         name: userInfo.username.split('#')[0],
-        tag: userInfo.username.split('#')[1],
+        tag: userInfo.username.split('#')[1]
     });
     if (!mmr_data) return null;
     return {
