@@ -1,15 +1,15 @@
-const Discord = require("discord.js");
-const fs = require('fs');
-const {Routes} = require('discord-api-types/v10');
-const SQLiteProvider = require("./storage/SQLiteProvider");
-const express = require('express');
-const {NetworkManager} = require("./network/NetworkManager");
+import { Client, GatewayIntentBits } from 'discord.js';
+import * as fs from 'fs';
+import { Routes } from 'discord-api-types';
+import SQLiteProvider from './storage/SQLiteProvider';
+import * as express from 'express';
+import NetworkManager from './network/NetworkManager';
 
 class Client {
 
     constructor() {
-        this.initConfig();
-        this.loadApp().then();
+        this.initConfig()
+        this.loadApp()
         process.on('unhandledRejection', error => {
             console.log(error);
         })
@@ -22,14 +22,17 @@ class Client {
         this.app = express();
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }))
+        
         this.networkManager = new NetworkManager(this.app);
         this.networkManager.registerResponses();
         this.networkManager.registerNetworkURL();
+        
         this.app.listen(3000, () => {
             console.log(
                 `VPT app listening at http://localhost:3000`
             );
         });
+        
         this.app.keepAliveTimeout = 20 * 1000;
         this.app.headersTimeout = 40 * 1000;
     }
@@ -80,10 +83,6 @@ class Client {
         this.database.init();
     }
 
-    /**
-     *
-     * @returns {SQLiteProvider}
-     */
     getDatabase() {
         return this.database;
     }
@@ -93,17 +92,17 @@ class Client {
     }
 
     login() {
-        this.client = new Discord.Client({
+        this.client = new Client({
             intents: [
-                Discord.GatewayIntentBits.Guilds,
-                Discord.GatewayIntentBits.GuildMessages,
-                Discord.GatewayIntentBits.GuildMembers,
-                Discord.GatewayIntentBits.GuildPresences,
-                Discord.GatewayIntentBits.GuildMessageTyping,
-                Discord.GatewayIntentBits.DirectMessages,
-                Discord.GatewayIntentBits.MessageContent,
-                Discord.GatewayIntentBits.GuildVoiceStates,
-                Discord.GatewayIntentBits.GuildInvites
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.GuildMessages,
+                GatewayIntentBits.GuildMembers,
+                GatewayIntentBits.GuildPresences,
+                GatewayIntentBits.GuildMessageTyping,
+                GatewayIntentBits.DirectMessages,
+                GatewayIntentBits.MessageContent,
+                GatewayIntentBits.GuildVoiceStates,
+                GatewayIntentBits.GuildInvites
             ],
             partials: [
                 Discord.Partials.Message,

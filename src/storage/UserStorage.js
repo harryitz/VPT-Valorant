@@ -1,10 +1,10 @@
-const {QuickDB} = require("quick.db");
+import { QuickDB } from "quick.db";
 const db = new QuickDB({
     filePath: "./users.sqlite",
     table: "users",
 })
 
-const addUser = (user) => {
+export const addUser = (user) => {
     const existsUser = getUser(user.id);
     if (existsUser) {
         db.set(user.id, user)
@@ -13,11 +13,11 @@ const addUser = (user) => {
     db.add(user.id, user)
 }
 
-const getUser = (id) => {
+export const getUser = (id) => {
     return db.get(id);
 }
 
-const isReadyLink = async (username) => {
+export const isReadyLink = async (username) => {
     const users = await db.all();
     return new Promise((resolve, reject) => {
         users.forEach(user => {
@@ -29,7 +29,7 @@ const isReadyLink = async (username) => {
     })
 }
 
-const getUserbyPuuid = (id, puuid) => {
+export const getUserbyPuuid = (id, puuid) => {
     return db.get(id).then(user => {
         if (!user) return null;
         if (user.puuid === puuid) {
@@ -40,14 +40,6 @@ const getUserbyPuuid = (id, puuid) => {
     })
 }
 
-const deleteUser = (id) => {
+export const deleteUser = (id) => {
     db.delete(id)
-}
-
-module.exports = {
-    addUser,
-    getUser,
-    getUserbyPuuid,
-    deleteUser,
-    isReadyLink
 }

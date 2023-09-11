@@ -1,4 +1,4 @@
-class User {
+export class User {
 
     constructor({id, puuid, auth, username, region, entitlements}) {
         this.id = id;
@@ -9,5 +9,3 @@ class User {
         this.entitlements = entitlements;
     }
 }
-
-module.exports = User;
