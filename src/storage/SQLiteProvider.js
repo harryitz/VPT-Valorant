@@ -1,8 +1,8 @@
-import * as sqlite from 'sqlite3';
-import { addItemToString, log, removeItemFromString } from '../utils/Utils';
-sqlite.verbose()
+const {addItemToString, removeItemFromString, getFirstIndex, log, embedMessage} = require("../utils/Utils");
+const {refeshToken} = require("../utils/Auth");
+const sqlite = require("sqlite3").verbose();
 
-export default class SQLiteProvider {
+class SQLiteProvider {
 
     init() {
         this.db = new sqlite.Database("./database.sql", (err) => {
@@ -91,9 +91,9 @@ export default class SQLiteProvider {
     }
 
     async getFirstItemInProduct(id) {
-        return new Promise(async (resolve) => {
-            const items = JSON.parse(await this.getItemsInProduct(id))
-            resolve(items[0])
+        return new Promise(async (resolve, reject) => {
+            const items = await this.getItemsInProduct(id)
+            resolve(getFirstIndex(items))
         });
     }
 
@@ -173,25 +173,20 @@ export default class SQLiteProvider {
 
     async addCredit(id, credit, isAdmin = false, reason = "Không rõ") {
         if (isNaN(credit) || credit <= 0) return;
-
-        let noLimit = false;
-        const ranks = config.ranks;
-        const bonusRoles = config.bonusRoles;
-
         let maxLimit = await this.getMaxLimit(id);
+        let noLimit = false;
         const guild = await main.getClient().guilds.fetch(config.guild);
         const user = await guild.members.fetch(id);
         const limit = await this.getLimit(id);
-
+        const ranks = config.ranks;
+        const bonusRoles = config.bonusRoles;
         if (!user) return;
-        
         for (const rank in ranks) {
             const info = ranks[rank];
             if (user.roles.cache.has(info.role)) {
                 credit += info.bonusCredit;
             }
         }
-
         for (const bonus in bonusRoles) {
             const info = bonusRoles[bonus];
             if (user.roles.cache.has(info.role)) {
@@ -202,20 +197,16 @@ export default class SQLiteProvider {
                 credit += info.bonus;
             }
         }
-
         if (limit.limits >= maxLimit && !isAdmin && !noLimit) {
             const user = await main.getClient().users.fetch(id);
             if (!user) return;
             await user.send(`Bạn đã vượt quá giới hạn credit nhận được vào ngày hôm nay (**${limit.limits}**/**${maxLimit}**) nên không được cộng thêm bất kì 1 credit nào nữa. Vui lòng thử lại vào ngày mai!`);
             return;
         }
-
         if (!isAdmin) {
             await this.addLimit(id, credit);
         }
-        
         await log(`Người dùng **${user.user.username}** đã được cộng **${credit}** credit vì **${reason}**!`);
-
         let currentCredit = await this.getCredit(id);
         if (currentCredit) {
             currentCredit += credit;
@@ -233,20 +224,16 @@ export default class SQLiteProvider {
         const ranks = config.ranks;
         const inCreaseLimit = config.inCreaseLimit;
         const bonusRoles = config.bonusRoles;
-
         if (!user) return;
-
         if (user.roles.cache.has(config.verifyRole.id)) {
             maxLimit += config.verifyRole.limitCredit;
         }
-        
         for (const rank in ranks) {
             const info = ranks[rank];
             if (user.roles.cache.has(info.role)) {
                 maxLimit += info.limitCredit;
             }
         }
-
         for (const increase in inCreaseLimit) {
             const info = inCreaseLimit[increase];
             if (user.roles.cache.has(info.role)) {
@@ -257,7 +244,6 @@ export default class SQLiteProvider {
                 maxLimit += info.limitCredit;
             }
         }
-
         for (const bonus in bonusRoles) {
             const info = bonusRoles[bonus];
             if (user.roles.cache.has(info.role)) {
@@ -268,16 +254,14 @@ export default class SQLiteProvider {
                 maxLimit += info.limitCredit;
             }
         }
-        return noLimit ? Number.MAX_SAFE_INTEGER : maxLimit;
+        return maxLimit;
     }
 
     async removeCredit(id, credit, reason = "Không rõ") {
         if (isNaN(credit) || credit <= 0) return;
         const user = await main.getClient().users.fetch(id);
         if (!user) return;
-
         await log(`Người dùng **${user.username}** đã bị trừ **${credit}** credit vì **${reason}**!`);
-        
         let currentCredit = await this.getCredit(id);
         if (currentCredit) {
             currentCredit -= credit;
@@ -320,7 +304,7 @@ export default class SQLiteProvider {
     }
 
     async getRewardDay(id) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.db.get(`SELECT * FROM dailyrewards WHERE discord_id = ?`, [id], (err, row) => {
                 if (!row) {
                     resolve(null);
@@ -342,7 +326,7 @@ export default class SQLiteProvider {
     }
 
     async getPurchased(id) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.db.get(`SELECT * FROM purchased WHERE discord_id = ?`, [id], (err, row) => {
                 if (!row) {
                     const purchased = [];
@@ -372,7 +356,7 @@ export default class SQLiteProvider {
 
     async getInvites(id) {
         const currentDay = new Date().toLocaleDateString('vi-VN');
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.db.get(`SELECT * FROM invites WHERE discord_id = ?`, [id], (err, row) => {
                 if (!row) {
                     this.db.run(`INSERT INTO invites (discord_id, time, currentday) VALUES (?, ?, ?)`, [id, 0, currentDay])
@@ -395,3 +379,5 @@ export default class SQLiteProvider {
         this.db.run(`UPDATE invites SET time = ?, currentday = ? WHERE discord_id = ?`, [invites + 1, currentDay, id]);
     }
 }
+
+module.exports = SQLiteProvider;

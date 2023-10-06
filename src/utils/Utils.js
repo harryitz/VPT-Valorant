@@ -1,12 +1,12 @@
-import { EmbedBuilder } from "discord.js";
+const {EmbedBuilder} = require("discord.js");
 
-export const embedMessage = (description) => {
+const embedMessage = (description) => {
     return new EmbedBuilder()
         .setDescription(description)
         .setColor(Math.floor(Math.random() * 16777215));
 }
 
-export const getRankIcon = (rank) => {
+const getRankIcon = (rank) => {
     const rankIcon = {
         "iron": "https://i.imgur.com/PsD5BfU.png",
         "bronze": "https://i.imgur.com/2Y2A9xf.png",
@@ -21,7 +21,7 @@ export const getRankIcon = (rank) => {
     return rankIcon[rank];
 }
 
-export const getRankName = (rank) => {
+const getRankName = (rank) => {
     const rankName = {
         "iron": "Sắt",
         "bronze": "Đồng",
@@ -36,12 +36,11 @@ export const getRankName = (rank) => {
     return rankName[rank];
 }
 
-export const decodeToken = (token) => {
+const decodeToken = (token) => {
     const encodedPayload = token.split('.')[1];
     return JSON.parse(atob(encodedPayload));
 }
-
-export const parseSetCookie = (setCookie) => {
+const parseSetCookie = (setCookie) => {
     if (!setCookie) {
         console.error("Riot didn't return any cookies during the auth request! Cloudflare might have something to do with it...");
         return {};
@@ -55,7 +54,7 @@ export const parseSetCookie = (setCookie) => {
     return cookies;
 }
 
-export const stringifyCookies = (cookies) => {
+const stringifyCookies = (cookies) => {
     const cookieList = [];
     for (let [key, value] of Object.entries(cookies)) {
         cookieList.push(key + "=" + value);
@@ -63,7 +62,7 @@ export const stringifyCookies = (cookies) => {
     return cookieList.join("; ");
 }
 
-export const extractTokensFromUri = (uri) => {
+const extractTokensFromUri = (uri) => {
     const match = uri.match(/access_token=((?:[a-zA-Z]|\d|\.|-|_)*).*id_token=((?:[a-zA-Z]|\d|\.|-|_)*).*expires_in=(\d*)/);
     if (!match) return [null, null];
 
@@ -71,13 +70,17 @@ export const extractTokensFromUri = (uri) => {
     return [accessToken, idToken]
 }
 
-export const addItemToString = (string, item) => {
+const getFirstIndex = (string) => {
+    const json = JSON.parse(string);
+    return json[0];
+}
+const addItemToString = (string, item) => {
     const json = JSON.parse(string);
     json.push(item);
     return JSON.stringify(json);
 }
 
-export const removeItemFromString = (string, item) => {
+const removeItemFromString = (string, item) => {
     const json = JSON.parse(string);
     const index = json.indexOf(item);
     if (index > -1) {
@@ -86,16 +89,32 @@ export const removeItemFromString = (string, item) => {
     return JSON.stringify(json);
 }
 
-export const countItemsInString = (string) => {
+const countItemsInString = (string) => {
     const json = JSON.parse(string);
     return json.length;
 }
 
-export const log = async (message) => {
+const log = async (message) => {
     const channel = await main.getClient().channels.fetch(config.logChannel);
     if (channel) {
         channel.send({
             embeds: [embedMessage(message)]
         });
     }
+}
+
+
+module.exports = {
+    embedMessage,
+    getRankIcon,
+    decodeToken,
+    parseSetCookie,
+    stringifyCookies,
+    extractTokensFromUri,
+    getFirstIndex,
+    addItemToString,
+    removeItemFromString,
+    countItemsInString,
+    log,
+    getRankName
 }

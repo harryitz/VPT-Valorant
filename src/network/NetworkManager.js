@@ -1,5 +1,4 @@
-import { Authenticator } from './protection/Authenticator';
-
+const {Authenticator} = require("./protection/Authenticator");
 const Path = {
     GET_INFO: '/getInfo/:discordId',
     GET_REGION: '/getRegion/:discordId',
@@ -8,7 +7,7 @@ const Path = {
     GET_USER_CREDIT: '/getUserCredit/:discordId',
 };
 
-export default class NetworkManager {
+class NetworkManager {
     constructor(app) {
         this.app = app;
         this.responses = new Map();
@@ -82,3 +81,10 @@ export default class NetworkManager {
         });
     }
 }
+
+/**
+ * Export the NetworkManager.
+ *
+ * @type {{NetworkManager: NetworkManager}}
+ */
+module.exports = { NetworkManager };

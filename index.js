@@ -1,4 +1,5 @@
 const Client = require('./src/Discord');
+const { getWelcomeCredit } = require('./src/utils/Calculator');
 
 require('dotenv').config({
     path: __dirname + "/config/.env"

@@ -1,15 +1,15 @@
-import SimplDB from "simpl.db";
+const SimplDB = require('simpl.db');
 const db = new SimplDB();
 const inviter = db.createCollection('inviter')
 
-export const getInviterDB = (userid) => {
+const getInviterDB = (userid) => {
     return inviter.get(user => {
         if (!user) return false;
         return user.id === userid
     });
 }
 
-export const addInviterDB = (userid, data) => {
+const addInviterDB = (userid, data) => {
     const user = getInviterDB(userid);
     if (user) {
         inviter.update(
@@ -24,7 +24,7 @@ export const addInviterDB = (userid, data) => {
     })
 }
 
-export const addRankToInviterDB = async (id, rank) => {
+const addRankToInviterDB = async (id, rank) => {
     const user = await getInviterDB(id);
     if (user) {
         user.data.claimedRank.push(rank);
@@ -41,4 +41,10 @@ export const addRankToInviterDB = async (id, rank) => {
             claimedRank: [rank]
         }
     })
+}
+
+module.exports = {
+    addInviterDB,
+    getInviterDB,
+    addRankToInviterDB
 }

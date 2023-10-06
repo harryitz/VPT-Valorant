@@ -1,6 +1,5 @@
-export const Authenticator = (req, res, next) => {
+const Authenticator = (req, res, next) => {
     const authHeader = req.header('Authorization');
-
     let apiKey = null;
     if (authHeader) {
         apiKey = authHeader.substring(7);
@@ -15,6 +14,14 @@ export const Authenticator = (req, res, next) => {
             status: 401
         });
     }
-    
     next();
+};
+
+/**
+ * @param req
+ *
+ * @type {(function(*, *, *): (*|undefined))|*}
+ */
+module.exports = {
+    Authenticator
 };

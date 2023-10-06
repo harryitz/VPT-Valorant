@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const {embedMessage, getRankIcon} = require("../utils/Utils");
-const {login, login2FA, loginWithCookie} = require("../utils/Auth").default;
+const {login, login2FA, loginWithCookie} = require("../utils/Auth");
 const {isReadyLink} = require("../storage/UserStorage");
 
 /**

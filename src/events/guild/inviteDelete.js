@@ -6,6 +6,6 @@ module.exports = {
     async execute(invite) {
         let invites = await invite.guild.invites.fetch();
         if(invite.guild.vanityURLCode) invites.set(invite.guild.vanityURLCode, await invite.guild.fetchVanityData());
-        main.getClient().set(invite.guild.id, invite);
+        main.getClient().guildInvites.set(invite.guild.id, invite);
     }
 }
